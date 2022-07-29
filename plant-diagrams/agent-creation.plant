@@ -1,0 +1,111 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam BoxPadding 60
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #aaaaaa
+skinparam defaultFontName Arial
+
+actor User
+
+box Client
+participant "UI\nController" as ui
+participant "Server Socket\nHandler" as ssh
+end box
+
+box Server
+participant "Client Socket\nHandler" as csh
+participant "Agente\nController" as ac
+participant "Agent Sandbox" as sandbox
+participant "File System" as fs
+end box
+
+'participant "" as C
+
+== Client Actions ==
+
+autonumber 1.1
+User -> ui: UI für Agenten-\nerstellung aufrufen
+activate ui
+User -> ui: Namen vergeben
+User -> ui: Dateien / Ordner auswählen
+User -> ui: Einstiegsdatei Definieren
+User -> ui: "erstellen" drücken
+
+autonumber 2.1
+ui --> ssh: Nachricht senden
+deactivate ui
+activate ssh
+
+ssh -> ssh ++: Nachricht serialisieren
+return
+
+ssh -> csh: Agent-Erstellungs-\nnachricht senden
+activate csh
+
+|||
+
+== Server Actions ==
+
+csh -> csh ++: Nachricht deserialisieren\nund Strukturprüfung
+return
+|||
+csh -> ac: Nachricht weiterleiten
+activate ac
+
+autonumber 3.1
+ac -> ac ++: Anweisungsintegrität prüfen
+return
+
+||15||
+
+ac -> ac ++: Context import umschreiben
+return
+
+||15||
+
+ac -> fs: Agenten Ordner erstellen
+ac -> fs: Dateien in den Ordner hinterlegen
+ac -> fs: Agenten Manifest erweitern
+
+||50||
+ac -> sandbox **: Sandbox erstellen
+
+ac -> sandbox: Agent laden Kommando
+activate ac
+group Sandbox-Worker
+activate sandbox
+
+sandbox -> fs ++: Manifest laden
+return
+
+sandbox -> fs ++: Agent laden
+return
+
+end
+sandbox -> ac --: Laden erfolgreich
+deactivate ac
+
+autonumber 4.1
+ac -> csh --: Agent wurde geladen
+
+
+csh -> csh ++: Nachricht serialisieren
+return
+
+csh -> ssh: Agent erstellungs\nResultats-Nachricht senden
+deactivate csh
+
+== Client Actions ==
+
+ssh -> ssh ++: Nachricht deserialisieren
+return
+
+autonumber 5.1
+ssh -> ui ++: Neuen Agenten\nanzeigen
+return
+deactivate ssh
+
+||50||
+@enduml

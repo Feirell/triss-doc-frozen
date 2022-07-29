@@ -1,0 +1,112 @@
+\documentclass[11pt,a4paper]{article}
+
+%
+% Dependencies
+%
+
+\input{dependencies}
+
+%
+% Configuration
+%
+
+\input{configuration}
+
+%
+% Custom Commands
+%
+
+\input{custom-commands}
+
+%
+% Bib Source
+%
+
+\addbibresource{projektarbeit.bib}
+
+\begin{document}
+
+    \input{title-page}
+
+
+    \tableofcontents
+    \newpage
+
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{1em}
+
+
+    \input{chapters/intro/intro}
+
+    \input{chapters/intro/motivation}
+
+    \input{chapters/intro/goal}
+
+    \input{chapters/intro/related-works}
+
+    \input{chapters/intro/document-structure}
+
+
+    \input{chapters/target-definition/target-definition}
+
+    \input{chapters/target-definition/functional-requirements}
+
+    \input{chapters/target-definition/non-functional-requirements}
+
+
+    \input{chapters/conceptual-design/conceptual-design}
+
+    \input{chapters/conceptual-design/solution-outline}
+
+    \input{chapters/conceptual-design/overarching-concepts}
+
+    \input{chapters/conceptual-design/feasibility-analysis}
+
+    \input{chapters/conceptual-design/component-view}
+
+    \input{chapters/conceptual-design/runtime-view}
+
+    \input{chapters/conceptual-design/distribution-view}
+
+    \input{chapters/conceptual-design/example-random-exit-driver}
+
+
+    \input{chapters/reflection/reflection}
+
+    \input{chapters/reflection/ease-of-agent-developments}
+
+    \input{chapters/reflection/efficiency-of-implementation}
+
+    \input{chapters/reflection/functional-requirements-satisfaction.tex}
+
+    \input{chapters/reflection/artifacts}
+
+
+
+    \input{chapters/prospect/prospect}
+
+    \input{chapters/prospect/functional-improvements}
+
+    \input{chapters/prospect/performance-improvements}
+
+
+    \input{chapters/conclusion/conclusion}
+
+
+    \newpage
+
+%    \section{Abbildungsverzeichnis}
+
+    \listoffigures
+
+
+%    \section{Tabellenverzeichnis}
+
+    \listoftables
+
+
+%    \section{Literaturverzeichnis}
+
+    \printbibliography[title=Literaturverzeichnis]
+
+\end{document}

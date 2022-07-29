@@ -1,0 +1,28 @@
+
+\subsection{Einfachheit der Agentenentwicklung}
+
+Ein relevantes Resultat ist, welche Einschränkung diese Anwendung für die Entwicklung des Agenten vorgibt: je nachdem würde das erlauben, bestimmte Arten von Agenten gar nicht erst zu entwickeln oder zu betreiben.
+Dies kann sich auch stark auf die Einstiegshürde auswirken.
+
+Das eigentliche Interface, das ein Agent erfüllen muss, ist sehr einfach gehalten.
+Es beschränkt sich auf zwei zu implementierende Methoden, wobei \textit{getExportedAgentData} optional ist, insofern es dem Entwickler helfen soll, das Verhalten seines Agenten zu untersuchen.
+
+Die Methode \textit{handleFrame} ist die einzige erforderliche.
+Bei ihrem Aufruf werden die \textit{World}, die aktuellen Frame-Nummer und die Frame-Zeiten übergeben und eine World als Antwort erwartet.
+Wie genau der Agent diese also erzeugt ist nicht vorgegeben oder eingeschränkt.
+
+Dabei kann dieser Fahrzeuge erzeugen oder entfernen, von einen Ort an einen anderen teleportieren oder sich um seine Achse drehen lassen.
+Die eigentliche Veränderung wird nicht überprüft und das aktuelle Layout nicht in Betracht gezogen.
+Letzteres kann der Agent durch die Welt nicht nur abtasten, sondern auch verändern.
+
+Für die Verarbeitung stellt der Server Funktionen bereit, um beispielweise die Spuren zu ermitteln, diesen zu folgen oder Distanzen auf einer Strecke zu errechnen.
+Zusätzlich dazu implementiert der Random Exit Driver eine Kollisionsberechnung, die für einen neuen Agenten verwendet werden oder als Grundlage für eine andere Implementation dienen kann.
+
+Einschränkend wirkt nur, dass der Agent diskrete Zustände erzeugen muss.
+Insofern ist eine sehr offene API geschaffen worden, die die unterschiedlichsten Entwicklungen unterstützen sollte.
+
+Die Sprache JavaScript und das Ökosystem erlauben hier zusätzlich viele Freiheiten.
+Das liegt nicht zuletzt daran, dass die Sprache sehr einsteigerfreundlich ist, keine explizite Speicherverwaltung erfordert, keine Parallelität besitzt und viele Programmierparadigmen unterstützt, sondern auch daran, dass das Ökosystem durch npm viele unterschiedliche sehr aktuelle Pakete bereitstellt.
+So können via npm sogar beispielweise die Entwicklung und Nutzung von neuronalen Netzen ermöglicht bzw. beschleunigt werden\autocite{tensorflowTut2022}.
+
+Selbst dann wenn die Schnittstelle oder Bibliothek noch nicht als npm Paket verfügbar ist, kann man diese trotzdem via WebAssembly oder Nativen Add-ons nutzen.

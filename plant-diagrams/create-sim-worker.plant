@@ -1,0 +1,48 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam BoxPadding 25
+skinparam ParticipantPadding 20
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #aaaaaa
+skinparam defaultFontName Arial
+
+box \nServer\n  Operating System  \n
+participant "File System" as fs
+end box
+
+box \nTRISS Backend\n  Worker Simulation Instance Realm  \n
+participant "AgentLoader" as alsit
+participant "SimulationInstance\nWorkerEntry" as sep
+participant "Simulation\nInstance" as si
+end box
+
+autonumber 4.2
+
+[->> sep++: Instanzerzeugungskommando
+'activate sep
+'
+autonumber 5.1
+
+||20||
+sep -> alsit**: Agent Loader erzeugen
+
+sep -> alsit++: Agent laden
+
+alsit -> fs ++: Agent laden
+return
+
+return
+
+sep -> sep: Welt erzeugen
+
+sep -> si**:
+
+autonumber 6.1
+
+[<<- sep--: Sende Ready Status
+
+||15||
+
+@enduml

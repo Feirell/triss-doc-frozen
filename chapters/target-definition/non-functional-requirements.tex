@@ -1,0 +1,98 @@
+\subsection{Nicht funktionale Anforderungen}
+
+Zusätzlich zu diesen funktionalen Anforderungen sollen hier noch nicht funktionale oder auch Qualitätsanforderungen definiert werden.
+Diese beschreiben im Gegensatz zu den oben genannten nicht Anforderungen an den Funktionsumfang, sondern an die Charakteristika der Bereitstellung dieser.
+
+In dem Kontext dieses Projektes sind sie von großer Bedeutung, da sie Aufschluss darüber geben, ob sich das JavaScript Ökosystem für solch eine Anwendung eignet.
+Auch würde eine gute Performance es einfacher machen, diese Anwendung für das Erproben von Agenten zu verwenden, da die Menge der Fahrzeuge in direkter Relation zu der Offensichtlichkeit von emergenten Verhalten steht.
+
+%Für alle Qualitätsanforderungen soll zur Überprüfung eine Instanz mit keinen Kacheln erzeugt werden, welche mit einem Agenten betrieben wird, welcher mindestens 5000 Fahrzeuge bewegt.
+%Dieser Agent soll dabei keine Kollisionsregeln oder andere Logiken verarbeiten sondern die Bewegung der Fahrzeuge intrinsisch aus der aktuellen Simulationszeit ableiten.
+%
+%Bei dieser Instanz sollen dann, bei einem Gerät mit mindestens 8GB Arbeitsspeicher, mindestens einem AMD FX 8320 (oder vergleichbar) und einer Nvidia GeForce 1060 3G (oder vergleichbar), 30 Bilder die Sekunde, mit allen Fahrzeugen und Kacheln, nicht später als eine Sekunde nach ihrer Errechnung erzeugt werden können.
+
+\textit{QLT – quality requirements – Qualitätsanforderung}
+
+\subsubsection{QLT\#01 – Verarbeitungseffizienz} \label{qlt:processing_efficiency}
+
+Die Anwendung muss in der Lage sein, eine große Menge an Fahrzeugen (mindestens 5000) bzw. Kacheln (mindestens 1000) zu verwalten.
+Diese Verwaltung umfasst sowohl das Übergeben dieser Informationen an den Agenten als auch das Laden dieser und das Übertragen an die darstellenden Komponenten.
+
+Effizient meint dabei, dass die Anwendung einen Fokus darauf legen soll, die Daten kompakt im Speicher abzulegen, doppelte Daten zu vermeiden und dafür Sorge zu tragen das Umwandlungen/Versendungen von Daten nur dann bzw. nur in dem Ausmaß stattfinden, wie es inhaltlich notwendig ist.
+
+\subsubsection{QLT\#02 – Darstellungseffizienz} \label{qlt:rendering_efficiency}
+
+Die Anwendung soll in der Lage sein, den aktuellen Zustand, den der Agent produziert hat, in Echtzeit darzustellen.
+Dafür soll darauf geachtet werden, dass die Darstellung möglichst effizient aus den gegebenen Daten erzeugt wird.
+
+\subsubsection{QLT\#03 – JavaScript Ökosystem} \label{qlt:js_ecosystem}
+
+Die Anwendung soll mit Technologien aus dem JavaScript Ökosystem umgesetzt werden, da dies der Untersuchungsgegenstand ist.
+Dieses Ökosystem inkludiert die Laufzeitumgebungen wie Node.js oder Google Chrome, aber auch die Bibliotheken, die aus dem npm Repository bezogen werden können, so wie die Standardbibliotheken der Laufzeitumgebungen.
+
+\subsubsection{QLT\#04 – Erweiterbarkeit} \label{qlt:extendability}
+
+Die Anwendung soll durch den Anwender erweitert und angepasst werden können.
+Dies beinhaltet nicht nur die durch die Benutzerschnittstelle definierbaren Layouts und Agenten, sondern auch die Möglichkeit, weitere Kacheln und deren Spuren spezifizieren zu können.
+Zusätzlich soll diese Anwendung die Ergänzung anderer Agent-Handler, die den Agenten betreiben und den Zyklus aufrechterhalten, erlauben, sodass Agenten beispielweise nicht nur auf dem gleichen Rechner, sondern verteilt auf mehreren physikalischen Systemen betrieben werden können.
+
+Die Anwendung soll insgesamt so aufgebaut werden, dass Teile ausgetauscht werden können und damit die Anwendung erweitert werden kann.
+
+\iffalse
+%\begin{itemize}
+%\item Es soll eine Software geschaffen werden, welche die Simulation von verschiedensten Computer gesteuerten Verkehrsteilnehmern erlaubt.
+Es soll eine Software geschaffen werden, welche die Simulation von verschiedensten Computer gesteuerten Verkehrsteilnehmern erlaubt.
+Der Fokus soll auf den Wechselwirkungen zwischen diesen Teilnehmer liegen.
+
+%\item Hierbei ist vor allem die Interaktion dieser relevant. Das System soll dafür diskrete Simulationszustände iterativ, in festen Zeitschritten, determenistische und wiederholbare berechnen.
+Um dies zu ermöglichen, soll das System die eingesetzten Agenten zur transformation eines diskreten Zustandes in einen neuen verwenden.
+Dabei soll das System die Berechnung in festen Zeitabständen neu beginnen.
+Der Agent muss so konzipiert sein, das er nur den internen Zustand, so wie den aktuellen Weltzustand verwendet, um den nachfolgenden Zustand zu berechnen.
+Somit soll der neue Zustand deterministisch aus dem vorangegangenen Zustand errechnet werden.
+Beide Zustände müssen dabei so gegeben sein das sie serialisiert werden können, was dann die Unterbrechung und Verschiebung in eine andere Ausführungsgruppe erlaubt.
+
+%\item Die Software soll vor allem zum iterativen Erproben genutzt werden, in dem man kleinere inkrementelle Änderungen an den Agenten oder dem Layout des Straßennetzes vornimmt und dann Anhand der Resultate gegebenenfalls weitere Änderungen plant. Dieser Zyklus von Überlegung, Veränderung und Beobachtung soll es möglich machen auch indirekte Folgen einfacher zu manipulieren.
+Der Kernfokus der Software liegt hierbei auf dem iterativen Erproben.
+Der Nutzen soll in der Lage sein mit dieser Software iterativ Änderungen an einem Agenten und dem Straßennetz vornehmen zu können, um dann die Auswirkung dieser Änderungen zu beobachten.
+Das soll es dem Nutzer erlauben auch komplexe Folgen besser einordnen zu können, was dem Problem entgegen wirkt, welches in der Motivation beschrieben ist.
+Die iterative Erprobung soll dabei in einem Zyklus geschehen, welcher aus den folgenden Schritten besteht:
+
+\begin{enumerate}
+    \item Erstellung des Agenten und des Straßennetzes.
+    \item Beobachtung des Verhaltens.
+    \item Ermittlung der Differenzen zu dem gewünschten Verhalten.
+    \item Planung von Veränderungen an dem Agenten und an dem Straßennetz um das gewünschte Verhalten zu erzeugen.
+    \item Anwendung der Änderungen, fortsetzung bei Schritt 2.
+\end{enumerate}
+Durch diesen Zyklus schwächt man das Problem der fehlenden Vorhersehbarkeit des Straßenverkehrs ab und ermöglicht somit eine zielgerichtete Entwicklung.
+
+% TODO Think about if this should be included
+%\item Auch wenn der Fokus auf den Fahrzeugen liegen soll, soll die Software ebenso andere Teilnehmer wie Beispielweise Ampeln oder Schranken inkludieren können oder zumindest das hinzufügen solcher begünstigen.
+
+
+%\item Diese Teilnehmer sollen durch Agenten mit einer einfachen API gesteuert werden, so das hier auch leicht Anpassungen von Nutzern vorgenommen werden können, welche Softwareentwicklung als solche nicht vordergründig betreiben oder die System Struktur nicht tiefer gehend kennen.
+Das Straßennetz soll dafür durch einen intuitiven Editor angelegt werden können.
+Das Netz selbst soll hierbei aus einzelne quadratisch Bausteine bestehen, welche der Nutzer in einem regelmäßigen Raster definieren kann.
+Dieses Vorgehen bieten eine gute Grundlage welche einfach um komplexere Bausteine erweitert werden kann, welche besser zu dem gewünschten Szenario passen, jedoch gleichzeitig in einem angebrachtem Verhältnis zu dem angedachtem Arbeitsvolumen einer Projektarbeit steht.
+Die Agenten sollen durch ein Programm gegeben sein welches der Nutzer mit Hilfe von Beispielen und einer entsprechenden Dokumentation anfertigt oder einen gegebenen Agenten anpasst.
+Dieses Programm wird dann vom System aufgerufen und welches dabei die notwendigen API Schnittstellen übergibt.
+
+%\item Es soll eine große Anzahl von Teilnehmern berechnet werden können um auch komplexe Interaktionen simulieren zu können.
+Das zentrale Ziel des Systems liegt hierbei auf dem effizienten Verarbeiten der Daten und der Ermöglichung der Interaktion mit diesen.
+Die Effizienz des Systems sollte hoch sein, damit viele Verkehrsteilnehmer simuliert werden können.
+Das erst würde die Darstellung von emergenten Verhalten ermöglichen.
+%\item Die Berechnung sollte in Echtzeit möglich sein damit Interaktionsmöglichkeiten für den Nutzer bestehen, welche ihm erlauben Informationen über die Teilnehmer im aktuellen Simulationsschritt zu erhalten und Nutzer schnell die Folgen ihrer eingesetzten Veränderungen erkennen können. Erst dadurch wird eine praktische iterative Erprobung möglich.
+Hinzukommt die Notwendigkeit das die Anwendung in der Lage sein soll viele Verkehrsteilnehmer in Echtzeit zu berechnen.
+Sonst ließe dieses System keine iterative Erprobung zu beziehungsweise würde diese stark erschweren.
+
+%\item Die Darstellung der Simulation soll zwar modellhaft sein aber auch von Leihen identifiziert werden können, was hier durch simplifiziert Modelle von Autos in einer 3D Welt realisiert werden soll. Durch die plastische Darstellung lassen sich auch einfacher Muster im Verkehr erkennen, als das der Fall wäre wenn man Beispielweise die Daten nur in Form von Diagrammen ausgeben würde.
+Ebenfalls soll die Software den aktuellen Simulationszustand anschaulich, wenn auch modellhaft, darstellen können.
+Das erlaubt nicht nur eine bessere Zugänglichkeit, sondern ermöglicht auch eine bessere Erkennung von Mustern durch den Nutzer.
+Diese Darstellung sollte also Fahrzeuge als solche darstellen und nicht den Zustand über Tabellen oder ähnliche Mittel ausgeben.
+
+% TODO Metriks where removed
+%\item Es sollen Auswertungen über verschiedenste Metriken erstellen werden können damit man sicherstellen kann das seine eingesetzten Veränderungen auch tatsächlich die gewünschten Ergebnisse zur Folge haben.
+%\end{itemize}
+
+
+\fi

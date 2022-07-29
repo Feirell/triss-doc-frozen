@@ -1,0 +1,107 @@
+
+\subsection{Beispiel Agent – Random Exit Driver}
+
+Der Random Exit Driver (RAD) ist eine Beispiel-Implementation eines Agenten, die im Rahmen dieser Arbeit angefertigt worden ist, um zu demonstrieren, wie man die APIs verwenden kann und wie man dadurch in der Lage ist, Fahrzeuge entlang der Fahrbahnen zu bewegen.
+
+Der Agent ist dafür besonders einfach gehalten, um ihn so gut wie möglich nachvollziehen zu können.
+Nicht desto trotz enthält auch er einige aufwendigere Bereiche, die vor allem dabei helfen sollen, ihn auch bei einer größeren Menge von Knoten noch funktional zu halten.
+
+Der eigentliche Umfang ist überschaubar und teilt sich generell in die folgenden zwei Abschnitte.
+
+\subsubsection{Verhaltenslogik}
+
+Der erste ist die eigentliche Logik des Agenten, die in dem Diagramm \refimg{fig:example-agent-sequence} grob umrissen werden soll.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=.65,center]{plant-diagrams/example-agent-sequence.pdf}
+    \caption{Ablauf des Beispiel-Agenten}
+    \ownsource
+    \label{fig:example-agent-sequence}
+\end{figure}
+
+\FloatBarrier
+
+Die Schritte \textit{Erzeuge Fahrzeuge} und \textit{Bewege Fahrzeuge} fassen dabei weitere Schritte zusammen.
+Sie sind jeweils sehr einfach gehalten.
+
+Der Schritt \textit{Erzeuge Fahrzeuge} läuft im Detail dann folgendermaßen ab.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=.65,center]{plant-diagrams/example-agent-sequence-spawn-vehicles.pdf}
+    \caption{Ablauf des Erzeugungsprozesses}
+    \ownsource
+    \label{fig:example-agent-sequence-spawn-vehicle}
+\end{figure}
+
+\FloatBarrier
+
+Begonnen wird damit, alle Spawner-Tags aus der Welt zu filtern.
+Diese werden dann im Anschluss sequenziell durchlaufen.
+Zu jedem dieser Spawner wurde im Erstellungsschritt des Agenten eine Tabelle mit allen verfügbaren Routen hinterlegt.
+Diese wurden dann nach den anliegenden Kacheln, also der ersten Kachel der Route, gruppiert.
+
+Diese Gruppen werden dann durchlaufen und aus jeder wird dann eine zufällige Route verwendet, daher auch der Name, Random Exit Driver.
+Unabhängig davon, welche Route gewählt wurde, ist die erste Kachel all dieser Routen die gleiche, damit hätte auch die darauf folgende Kollisionsprüfung das gleiche Ergebnis.
+
+Sollte der Platz noch frei sein, platziert der Agent eine zufällige Fahrzeugklasse und hinterlegt im Agenten, welches Modell sich auf welcher Route mit welchem Ziel befindet.
+Dieser Eintrag ist dann der eigentliche Kenntnisstand des Agenten, Fahrzeuge in der Welt ohne diesen Eintrag werden nicht behandelt.
+
+Der Schritt \textit{Bewege Fahrzeuge} baut darauf auf und verwendet vor allem diesen Eintrag im Register.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=.65,center]{plant-diagrams/example-agent-sequence-move-vehicles.pdf}
+    \caption{Ablauf des Bewegungsprozesses}
+    \ownsource
+    \label{fig:example-agent-sequence-move-vehicle}
+\end{figure}
+
+\FloatBarrier
+
+Es wird nun sequenziell durch alle Fahrzeuge iteriert und für jedes der Registereintrag geladen.
+Der Grund, warum dieser getrennt gespeichert und nicht an dem Fahrzeug Objekt angeheftet wird, ist, dass dem Agenten nicht garantiert wird, dass es noch die gleiche Objektinstanz ist.
+
+Sollte die aktuelle Distanz auf der Route der maximalen Länge der Route entsprechen, wird das Fahrzeug aus der Welt und dem Register entfernt, wenn nicht, wird eine statische Distanz auf die aktuelle Distanz addiert (es wird keine Beschleunigung simuliert) und dann geprüft, ob bei der neuen Position eine Kollision entsteht.
+
+Falls das nicht der Fall sein wird, wird das Fahrzeug an diese Position verschoben.
+Die Kollisionsinformation, die für diese Abfrage verwendet wird, wird allerdings nicht direkt aktualisiert.
+
+Das erlaubt es dem Agenten, diesen Abschnitt auf mehrere Realms zu verteilen und die Verschiebung parallel zu errechnen.
+Auch wenn dies hier noch nicht genutzt wird, eliminiert es zusätzlich Probleme, die durch eine unterschiedliche Behandlungsreihenfolge entstehen würden.
+
+Schlussendlich wird die Kollisions-Tabelle kumulativ aktualisiert.
+
+\subsubsection{Hilfsstrukturen}
+
+Das oben aufgeführte Verhalten ist so in zwei bzw. drei Methoden in der Agenten-Klasse implementiert.
+Jedoch hatte sich bei der Entwicklung und Implementierung gezeigt, dass die hohen Laufzeitkomplexitäten die eigentliche Nutzbarkeit stark beschränken.
+
+So muss bei jeder Bewegung des Fahrzeuges, bei einer naiven Implementation, zu jedem anderen Fahrzeug geprüft werden, ob es kollidieren würde.
+Somit besteht hier eine Komplexität von $O(n^2)$.
+Bei der Erzeugung der Fahrzeuge besteht das gleiche Problem und zusätzlich wird dies durch die Anzahl der Spawner multipliziert.
+Dazu kommt noch die Routenfindung, die bei der naiven Implementation auch bei jedem Frame erneut durchgeführt werden müsste.
+
+Bei dieser Routenfindung wird dann von jedem Spawner zu jedem anderen Spawner versucht, eine Route zu finden, wobei diese jeweils dann als Breitensuche über die Kacheln implementiert ist, welche ebenfalls eine Laufzeit von $O(n^2)$ hat.
+
+In der Realität zeigt sich, dass selbst Szenarien mit vier Spawnern und 30 Kacheln bereits eine hohe Auslastung erzeugen.
+
+Um dem entgegenzuwirken, wurden Caches erstellt, die einfache Ausschlusskriterien verwirklichen und Ergebnisse vorberechnen.
+Diese Caches selbst wurden sehr einfach gehalten und sind nur als Beispiele zur Beschleunigung zu verstehen.
+
+Der erste Cache ist der Navigator, der direkt zu Beginn alle möglichen Routen errechnet und diese dann anhand der ersten Kachel gruppiert.
+Dieser Cache wird vom Spawner verwendet und braucht nicht aktualisiert zu werden, da dieser Beispiel-Agent keine Veränderungen an den Kacheln vornimmt.
+
+Der Collision-Cache ist der, der von der Bewegungsroutine verwendet wird, um zu überprüfen, ob ein Fahrzeug mit einem anderen kollidiert.
+Er verwendet intern ein Zellensystem, das Fahrzeuge all den Zellen zuordnet, in denen sich Teile seiner Geometrie befinden.
+Dadurch wird in der Verwendung die eigentliche Menge an Kollisionsberechnungen drastisch reduziert.
+
+Zusätzlich speichert dieser Cache auch ab, was das Ergebnis einer Kollision zwischen den Fahrzeugen \textit{A} und \textit{B} war, und gibt dieses Resultat bei allen erneuten Anfragen zwischen diesen beiden Parametern und auch der Abfrage zwischen \textit{B} und \textit{A} wieder.
+
+Dieser Cache wird im Verlaufe der Simulation ständig aktualisiert, wobei dann der Cache für die Abfrage, bei der \textit{A} beteiligt ist, verworfen wird und die Zellenzuordnung erneut berechnet wird.
+
+Beide Caches erlauben eine Verwendung des Agenten mit einer bedeutend größeren Menge an Fahrzeugen, limitieren jedoch nicht die logische Erweiterung des Verhaltens, sodass Beispielweise die Beachtung von rechts vor links ohne Anpassung dieser möglich wäre.
+
+
+% 1325 lines 10 files

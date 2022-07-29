@@ -1,0 +1,18 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+if(Navigator existiert?) equals ( existiert ) then
+else (\nexistiert\nnicht\n\n)
+  :Navigator erstellen;
+endif
+:Fahrzeugzustand als
+verändert markieren;
+:Erzeuge Fahrzeuge;
+:Bewege Fahrzeuge;
+:Welt zurückgeben;
+end
+@enduml

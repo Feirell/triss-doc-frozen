@@ -1,0 +1,78 @@
+\subsection{Funktionale Anforderungen}
+
+Die hier folgenden Anforderungen wurden für die Test-Implementation spezifiziert, um eine Mindestbenutzbarkeit herzustellen.
+
+\textit{FNC – functional requirement – Funktionale Anforderungen}
+
+\subsubsection{FNC\#01 – Definition eines Straßenlayouts} \label{fnc:define_layout}
+
+Der Nutzer soll in der Lage sein, eine Repräsentation eines Straßenlayouts zu modellieren.
+Dieses Modell soll verschiedene signifikante Elemente eines Straßensystems wie beispielweise Geraden, Kurven oder (T-)Kreuzungen beinhalten.
+
+Die Modellierung soll sowohl nachvollziehbar und einfach verwendbar für den Nutzer als auch gut verarbeitbar für den Agenten sein.
+Um dafür die Grundlage zu schaffen, soll die Modellierung durch ein gleichmäßiges Raster beschränkt sein.
+In jeder Zelle des Rasters kann dann ein Element des Straßennetzes, wie beispielweise eine Kurve, platziert werden.
+
+Damit die Modellierung für den Nutzer zusätzlich vereinfacht wird, soll diese über einen 3D-Editor, wie in \refgoal{fnc:configure_layout} beschrieben, erfolgen.
+
+Nach der Erstellung, bei der noch ein Name und eine optionale Beschreibung vergeben werden können, ist dieses dann für die weitere Verwendung im System hinterlegt.
+
+\subsubsection{FNC\#02 – Inspektion eines Straßenlayouts} \label{fnc:inspect_layout}
+
+Das Straßenlayout soll in einer 3D-Darstellung erfolgen.
+Der Nutzer soll dabei in der Lage sein, mithilfe der Maus die Position und die Orientierung der Kamera zu verändern.
+
+Die Modellierung der Darstellung soll an die Realität angelehnt sein und wiedererkennbare Merkmale aufweisen.
+Damit ist gemeint, dass ein blauer bzw. himmelähnlicher Hintergrund gezeichnet werden soll, dass eine Grundebene vorhanden sein soll und dass Kachelelemente als Kurven, Geraden etc. wiedererkennbar sein sollen.
+
+Durch die Kombination der beiden erstgenannten wird dann ein Horizont erkennbar und damit eine grundlegende Orientierung gegeben.
+Die Kacheln, die das Layout repräsentieren, sollen dann auf dieser Grundebene dargestellt werden.
+
+\subsubsection{FNC\#03 – Platzierung von Kacheln} \label{fnc:configure_layout}
+
+Diese Anforderung basiert auf der Funktionalität, die in \refgoal{fnc:inspect_layout} beschrieben worden ist.
+
+Diese Darstellung soll um ein 2D-Element erweitert werden, das eine Liste von platzierbaren Kacheln beinhaltet.
+Aus dieser kann der Nutzer dann eine auswählen, wodurch dann bei der Bewegung der Maus über die Grundebene eine Vorschau-Kachel an dieser Stelle im Raster dargestellt wird.
+
+Wenn der Nutzer dann klickt, soll diese Kachel an der Stelle, an der sich die Maus befindet, im Layout platziert werden.
+Durch dieses Vorgehen kann der Nutzer auch Kacheln ersetzen.
+
+Die Benutzerschnittstelle soll dem Nutzer auch die Möglichkeit geben, einzelne Kacheln aus dem Layout zu lösche.
+
+\subsubsection{FNC\#04 – Spezifikation eines Agenten} \label{fnc:specification_agent}
+
+Der Nutzer soll in der Lage sein, zu erfahren, welche Schnittstellen die Simulationsplattform von einem Agenten erwartet und welche Daten diese dann darüber bereitstellt bzw. bezieht.
+
+Der Nutzer soll dann dazu fähig sein, einen Agenten als eine Sammlung von Quellcodedateien zu definieren, die er dem System über eine Benutzerschnittstelle übergeben kann.
+
+Diese liest das System dann ein und prüft, ob es diese verarbeiten kann bzw. ob er eine Instanz dieses Agenten erstellen kann.
+Sollte das nicht gelingen, verwirft er den Agenten und gibt eine Fehlermeldung aus.
+
+Andernfalls nimmt er, nachdem der Nutzer noch einen Namen und eine optionale Beschreibung vergeben hat, den Agenten auf und stellt ihn von da an für neue Simulationsinstanzen bereit.
+
+\subsubsection{FNC\#05 – Betrieb einer Simulation} \label{fnc:running_simulation}
+
+Der Nutzer soll in der Lage sein, einen Agenten und ein Layout zu kombinieren um daraus eine Simulationsinstanz zu erschaffen.
+Diese Simulation beinhaltet dann einen konkreten Zustand der Welt, der die Kacheln sowie die Fahrzeuge umfasst.
+
+Dafür soll das System eine neue Instanz des Agenten erzeugen und ihm den aktuellen Zustand übergeben.
+Dieser erzeugt dann aus diesem einen Folgezustand, also beispielweise die veränderte Position von Fahrzeugen, welchen er dann an das System zurückliefert.
+
+Das System verwaltet diesen dann und erlaubt es dem Nutzer, diesen abzurufen.
+
+Das System soll diese Simulationsinstanz isolieren, um besser gegen Fehler innerhalb des Agenten gesichert zu sein und ihn bei Bedarf abzuschalten.
+
+\subsubsection{FNC\#06 – Inspektion einer Simulation} \label{fnc:inspecting_simulation}
+
+Das System soll es ermöglichen, dass ein Nutzer den aktuellen Simulationszustand einsehen kann.
+Diese Darstellung soll, ähnlich wie in \refgoal{fnc:inspect_layout} über eine 3D-Darstellung erfolgen, die in diesem Fall dann nicht nur die Kacheln, sondern auch die Fahrzeuge darstellen kann.
+
+Der Nutzer soll auch hier dazu fähig sein, durch Mausbewegungen die Kameraposition zu verändern, um so bestimmte Teilbereiche der Simulation besser betrachten zu können.
+
+Hinzu kommt, dass der Nutzer in der Lage sein soll, Informationen, die der Agent zusätzlich für die eine Entität bereitstellt, einsehen kann und genauso wie die Simulation selbst in Echtzeit aktualisiert werden.
+
+Darüber hinaus soll das Voranschreiten der Simulation pausiert werden können.
+Dies erlaubt es Nutzern, einen konkreten Zustand besser inspizieren zu können.
+
+Die Pausierung gilt dann für alle Nutzer, die diese Simulation betrachten.

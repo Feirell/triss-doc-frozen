@@ -1,0 +1,75 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam BoxPadding 25
+skinparam ParticipantPadding 20
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #aaaaaa
+skinparam defaultFontName Arial
+
+box \nTRISS Backend\nBackend Server Realm\n
+participant "Individual\nWebSocketHandler" as iwsh
+participant "Server" as server
+participant "AgentLoader" as al
+end box
+box \nServer\nOperating System\n
+participant "File System" as fs
+end box
+box \nTRISS Backend\nAgent Sandbox Realm\n
+participant "AgentLoader" as als
+participant "AgentSandbox" as sandbox
+end box
+
+autonumber 2.4
+
+[-> iwsh: Agent-Erstellungs-\nnachricht senden
+activate iwsh
+
+iwsh -> iwsh: Nachricht de-\nserialisieren und\nStrukturprüfung
+
+|||
+iwsh -> server++: Agent erstellen
+server -> al++: Agent\nimportieren
+
+autonumber 3.1
+al -> al: Anweisungsintegrität\nprüfen
+
+
+||15||
+
+al -> fs: Agenten\npersistieren
+al -> al: yarn install
+
+||50||
+al -> sandbox **: Sandbox erstellen
+
+al -> sandbox: Agent laden Kommando
+activate sandbox
+
+sandbox -> als**:
+sandbox -> als ++: Agent\nladen
+
+als -> fs ++: Agent laden
+return
+destroy als
+
+return
+
+sandbox <- sandbox: Schnittstellen   \nprüfen
+
+sandbox -> al --: Laden erfolgreich
+destroy sandbox
+
+autonumber 4.1
+al -> server --: Agent wurde\ngeladen
+server -> server: Clients\nbenachrichtigen
+server -> iwsh--: Agent
+
+
+iwsh -> iwsh: Nachricht\nserialisieren
+
+[<- iwsh--: Agenterstellungs\nResultats-\nNachricht senden
+
+||50||
+@enduml

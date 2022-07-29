@@ -1,0 +1,97 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam BoxPadding 25
+skinparam ParticipantPadding 20
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #aaaaaa
+skinparam defaultFontName Arial
+
+box \nTRISS Backend\nBackend Server Realm\n
+participant "Individual\nWebSocketHandler" as csh
+participant "Server" as srv
+participant "AgentLoader" as al
+participant "SimulationInstance\nRealtimeHandler" as sirh
+end box
+
+'box \nServer\n  Simulation Instance Realm  \n
+'participant "Agent Loader" as alsit
+'participant "Simulation\nEntrypoint" as sep
+'participant "Simulation\nInstance" as si
+'end box
+
+autonumber 2.4
+
+[->> csh: Instanzerstellungs-\nnachricht senden
+activate csh
+
+csh -> csh: Nachricht deserialisieren\nund Strukturprüfung
+
+csh -> srv++: Nachricht weiterleiten
+'activate server
+
+autonumber 3.1
+
+srv -> al++: Verfügbare Agenten\nladen
+return
+
+||15||
+
+srv -> srv: Verfügbare Layouts\nladen
+
+srv -> srv: Anweisungsintegrität\nprüfen
+
+||20||
+srv -> sirh **: Handler erstellen
+
+autonumber 4.1
+
+activate sirh
+sirh ->>]: Worker erzeugen
+sirh ->>]: Instanzerzeugungskommando
+'activate sep
+'
+'autonumber 4.1
+'
+'||20||
+'sep -> alsit**: Agent Loader erzeugen
+'
+'sep -> alsit: Agent laden
+'activate alsit
+'
+'alsit -> fs ++: Agenten Manifest laden
+'return
+'
+'alsit -> fs ++: Agent laden
+'return
+'
+'return
+'
+'sep -> sep++: Welt erzeugen
+'return
+'
+'sep -> si**:
+'
+'autonumber 3.12
+'sep ->> sirh--: Sende Ready Status
+
+||15||
+
+autonumber 6.1
+
+sirh <<-]: Sende Ready Status
+sirh -> srv--: Instanz erzeugt
+
+
+srv -> csh--: Instanz id
+
+||15||
+
+
+csh -> csh: Nachricht serialisieren
+
+[<<- csh--: Instanzerstellungs-\nResultats-Nachricht senden
+
+||10||
+@enduml

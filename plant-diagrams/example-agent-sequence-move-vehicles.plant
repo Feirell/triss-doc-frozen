@@ -1,0 +1,27 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+while(Fahrzeug vorhanden) is (\nFahrzeug\nvorhanden)
+    :Agenten Daten für Fahrzeug
+    laden;
+    if (Fahrzeug am Ziel angekommen?) then (\nJa\n)
+        :Aus der Welt entfernen;
+        :Agent Data des
+        Fahrzeuges entfernen;
+        :Kollisions-Daten entfernen;
+    else (\nNein\n)
+        :Neue Distanz bzw. Position
+        errechnen;
+        if (Kollidiert neue Position?) then (\nJa\n)
+        else (\nNein\n)
+            :Platziere Fahrzeug an neuer Position;
+        endif
+    endif
+endWhile
+:Kollisions-Tabelle aktualisieren;
+end
+@enduml

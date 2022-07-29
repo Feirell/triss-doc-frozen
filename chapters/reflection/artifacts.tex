@@ -1,0 +1,23 @@
+\subsection{Quellcode und Artefakte} \label{sec:artefacts}
+
+Die durch diese Entwicklung entstandenen Quelldateien, die Quelldateien für dieses Dokument, die Scripte zur Erschaffung der Artefakte sowie die vorgebauten Artefakte sind alle online frei zugänglich verfügbar.
+
+Der gesamte Quellcode ist unter der GPL 3.0 Lizenz als Git-Repository auf GitHub verfügbar.
+Dabei findet man in dem TRISS-Application Repository\footnote{\url{https://github.com/Feirell/triss-app-frozen}} die Quelldateien für alle Programm-Artefakte, unter dem TRISS-Documententation Repository\footnote{\url{https://github.com/Feirell/triss-doc-frozen}} sind die Quelldateien für dieses Dokument enthalten und im Dockerhub als \enquote{trissapp/triss-server}\footnote{\url{https://hub.docker.com/r/trissapp/triss-server}} das Backend bzw. als \enquote{trissapp/triss-client}\footnote{\url{https://hub.docker.com/r/trissapp/triss-client}} das Frontend.
+
+Im TRISS-Application Repository\footnote{\url{https://github.com/Feirell/triss-app-frozen}} findet man neben dem Quellcode auch eine technische Einführung in das Projekt sowie eine kurze Anleitung für die Entwicklung eines Agenten.
+
+In dieser technischen Einleitung findet man auch eine generelle Einführung in die Quellcode-Struktur und wie diese angepasst werden kann.
+Zusätzlich ist dort auch beschrieben, wie sich die Artefakte in Betrieb nehmen lassen.
+
+Darüber hinaus wurden im Kontext der Arbeit einige Artefakte erstellt, die einen generellen unabhängigen Mehrwert hatten und deshalb in das öffentliche npm-Repository ausgelagert worden sind.
+
+Dazu zählen primär die folgenden drei Pakete.
+
+Der \textit{performance-test-runner}\footnote{\url{https://npmjs.org/package/performance-test-runner}} ist ein Paket, das verwendet worden ist, um unterschiedliche Implementationen gegeneinander abzuwägen und somit stringent auf Verbesserungen hinzuarbeiten.
+
+Bei dem Paket \textit{event-emitter-typesafe}\footnote{\url{https://npmjs.org/package/event-emitter-typesafe}} handelt es sich um eine Teil-Implementation des DOM-Standards für EventEmitter\autocite{domSpecEvent2022}, welche hier allerdings Typsicher implementiert worden ist und zusätzlich nicht die Runtime-Implementation benötigt und somit auch für Node.js Anwendung verwendet werden konnte.
+
+Ebenso wurde das wichtige \textit{serialization-generator}\footnote{\url{https://npmjs.org/package/serialization-generator}} Paket ausgelagert.
+Dieses ist, wie bereits zu erkennen war, von zentraler Bedeutung, da es die performante Übertragung der Simulationszustände zwischen den Realms erlaubt.
+Hinzu kommt, dass darauf Wert gelegt worden ist, die Spezifikation der Datenstrukturen bzw. der (De-)Serialisierer sehr leserlich und intuitiv zu halten.

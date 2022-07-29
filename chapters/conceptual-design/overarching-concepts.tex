@@ -1,0 +1,106 @@
+\subsection{Querschnittliche Konzepte}
+
+%    Warum JavaScript, warum NodeJS bzw. Browser.
+%    Argumentation dieser
+
+\subsubsection{Architektur}
+
+Die gesamte Anwendung wird als Client Server Anwendung strukturiert, bei der der Client die Darstellung der Simulation und die Interaktion über eine Benutzerschnittstelle ermöglicht.
+Der Server betreibt indes die Instanz bzw. dessen Agenten und verwaltet die Entitäten.
+
+Dies erlaubt es, die Instanz unabhängig von dem für die Darstellung verwendeten Computer zu betreiben.
+Zusätzlich kann der Client dadurch auf einem leistungsschwächeren System eingesetzt werden, da er nur die Darstellung der Welt und die Nutzerschnittstelle betreiben muss, die unabhängig von dem Rechenaufwand des Agenten ist.
+
+Zusätzlich eignet sich eine solche Struktur auch für die Zusammenarbeit, da mehrere Clients die gleiche Instanz zeitgleich und in Echtzeit inspizieren können.
+
+Ebenso soll bei der Entwicklung des Clients ein Augenmerk darauf gelegt werden, dass dieser auch gut für Nutzer verwendbar ist, die keinen beruflichen Schwerpunkt in der Softwareentwicklung haben.
+
+\subsubsection{Server Technologien}
+
+Als Server soll für diese Anwendung Node.js verwendet werden, da sie die weitverbreitetste Runtime ist, die für JavaScript verwendet wird\autocite{stateofjsRuntimes2021}.
+
+Sie eignet sich ausgezeichnet für diese Anwendung, insofern sie für die Bereitstellung eines HTTP Servers ausgelegt ist\autocite{nodejsabout2022} und es durch ihre weite Verbreitung viele Quellen und Bibliotheken gibt, um etwaige Probleme zu lösen.
+Für diese Anwendung soll jedoch kein klassischer HTTP-Server damit erstellt werden, sondern WebSocket Tunnel verwendet werden, um an den Client kontinuierlich die neuen Frames übertragen zu können.
+
+Deshalb wurde für den Server das Paket \textit{ws}\footnote{\url{https://www.npmjs.com/package/ws}} verwendet, um solche Tunnel in Node.js erschaffen zu können.
+Im Gegensatz zu anderen WebSocket Bibliotheken, überzeugt sie mit einer fast hundertprozentigen Testabdeckung\footnote{\url{https://coveralls.io/github/websockets/ws}}, einer kontinuierlichen Entwicklung seit 2012, durch mehr als 176 Contributors\footnote{\url{https://github.com/websockets/ws}} und mehr als 50 Millionen wöchentlichen Downloads\footnote{\url{https://www.npmjs.com/package/ws}}.
+Zusätzlich werden auf dem Server die Standard-Bibliotheken \textit{worker\_threads}\footnote{\url{https://nodejs.org/docs/latest-v14.x/api/worker_threads.html}} und \textit{fs}\footnote{\url{https://nodejs.org/docs/latest-v14.x/api/fs.html}} verwendet.
+
+Die \textit{worker\_threads} werden verwendet, um die Simulationsinstanzen bzw. die Agenten zu betreiben.
+Die Bibliothek \textit{fs} erlaubt es, die hochgeladenen JavaScript-Dateien abzulegen, um sie später als Module zu importieren.
+
+Alle anderen signifikanten Anteile des Servers wurden individuell erstellt.
+Dazu gehören auch die zwei ausgelagerten Anteile, welche als eigene Pakete formuliert worden sind.
+
+Der erste ausgelagerte Anteil ist das \textit{serialization-generator}\footnote{\url{https://www.npmjs.com/package/serialization-generator}} npm-Paket.
+Dieses erlaubt es, JavaScript-Werte in einer sehr effizienten binären Form zu serialisieren.
+Auf dieser Grundlage werden die Frames und alle weiteren Kommandos vom Client zum Server und zwischen dem Server und dem Worker gesendet.
+%    Der Vorteil dieser Bibliothek wird im Kapitel genauer beleuchtet.
+
+Der zweite ist die Bibliothek \textit{event-emitter-typesafe}\footnote{\url{https://www.npmjs.com/package/event-emitter-typesafe}}, die es erlaubt, typsicher Events zu erstellen und auf diese zu warten.
+Diese Bibliothek orientiert sich dabei an dem DOM-Standard\footnote{\url{https://dom.spec.whatwg.org/\#interface-eventtarget}}, stellt allerdings eine Typsicherheit her und erlaubt die Verwendung dieser auch in Umgebungen, die den DOM-Standard nicht implementieren, wie beispielweise Node.js.
+
+Beide wurden erstellt und verwendet, da bestehende Lösungen nicht alle Funktionen boten, die notwendig waren, oder diese nicht performant genug bereitstellten.
+
+%    \begin{itemize}
+%        \item In diesem Unterkapitel soll vor allem die Wahl der Runtime und des Transportweges erläutert werden aber auch das multithreaden soll hier kurz angeschnitten werden.
+%    \end{itemize}
+
+\subsubsection{Client Technologien}
+
+Der Client basiert zentral auf dem Browser und damit auf den Technologien, die dieser mit sich bringt.
+Der Browser wurde ausgewählt, weil keine andere Runtime, wie beispielweise Electron\footnote{\url{https://www.electronjs.org/}}, die Verwendung des HTML-Standards\footnote{\url{https://html.spec.whatwg.org/multipage/}} erlaubt, ohne dafür typischerweise weitere Software installieren zu müssen.
+
+Zu diesen Technologien zählen vor allem das \textit{Document Object Model}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model}}, die \textit{Cascading Style Sheets}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/CSS}}, die \textit{WebSocket API}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API}} und die \textit{WebGL API}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API}}.
+Der Browser stellt darüber hinaus noch 72 weitere APIs bereit\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API}}, einige von diesen wurden zusätzlich verwendet.
+
+In jedem Fall wird vor allem der Aspekt genutzt, dass der Browser auf Grundlage der CSS-Angaben und der DOM-Struktur eine Benutzerschnittstelle generieren kann, die skaliert, durch Layouting organisiert wird, interaktiv ist und leicht manipuliert werden kann.
+Die deklarative Form der Beschreibung des UIs durch den Komponenten Baum ist besonders vorteilhaft, weil sie sehr einfach ist, viele Fehler einer imperativen Definition vermeidet und sich leicht anpassen und verarbeiten lässt.
+
+Zusätzlich zu diesen Browser-Technologien wurden vier weitere Bibliotheken verwendet.
+Zentral ist dabei \textit{Redux}\footnote{\url{https://redux.js.org/}}, as als Flux-Implementation eine der fehleranfälligsten Aspekte der Webentwicklung behandelt\autocite{flux2022}, durch seine Regeln drastisch vereinfacht und es erlaubt, viele Fehler direkt auszuschließen bzw. Fehler im Betrieb viel einfacher zu finden\autocite{garreau2018}.
+
+Daran schließt sich \textit{React}\footnote{\url{https://reactjs.org/}} als Bibliothek an, die elementar ist, um aus dem Anwendungszustand von Redux, einen DOM zu erschaffen.
+React wurde ausgewählt, weil bereits viel Erfahrung mit der Bibliothek vorlag, sie mit 80 \% das weitverbreitetste Frontend Framework ist\autocite{stateofjsfef2021} und der Funktionsumfang im Verhältnis zu anderen Frontend Frameworks genau für diese Anwendung geeignet ist.
+
+Um diese durch React erzeugten DOM-Elemente zu stylen, wird wegen des HTML-Standards, CSS verwendet.
+Um die Erstellung dieser Styling-Vorgaben zu vereinfachen und den Code lesbarer und einheitlicher zu halten, soll \textit{SASS}\footnote{\url{https://sass-lang.com/}} verwendet werden.
+Diese Sprache erweitert CSS und bildet ein Superset, ähnlich wie es bei TypeScript und JavaScript der Fall ist.
+Der Vorteil von SASS ist, dass hier Variablen, Selektor-Hierarchien und Compilezeit-Funktionen verwendet werden können, was zu einem übersichtlicheren CSS-Code führt.
+SASS wurde hier Less und weiteren Alternativen vorgezogen, um Werkzeugkompatibilität herzustellen.
+
+Als letzte zusätzliche Client Technologie wurde \textit{three.js}\footnote{\url{https://threejs.org/}} verwendet.
+Diese Bibliothek umschließt die WebGL und Canvas Schnittstelle und erlaubt es, 3D-Szenen als Szenengraph zu formulieren.
+Zusätzlich liefert diese Bibliothek viele Shader mit, die verwendet werden können, um unterschiedliche Materialien darzustellen.
+
+Auch wenn es viele WebGL Wrapper und Frameworks gibt\footnote{\url{https://www.khronos.org/webgl/wiki/User_Contributions\#Frameworks}}, ist die eigentliche Auswahl beschränkt.
+Viele der aufgelisteten Projekte werden schon lange nicht mehr gepflegt, haben noch nicht den benötigten Reifegrad erreicht, besitzen keine aktuelle Dokumentation, haben eine sehr kleine Nutzerschaft (wenig beantwortete Fragen), inkludieren nicht die benötigten Funktionen oder sind nicht performant genug.
+
+Projekte wie BabylonJS haben all diese Eigenschaften und kämen in Frage, jedoch liegt nicht wie bei three.js bereits Erfahrung mit der Verwendung vor.
+Beide Projekte sind sich im Funktionsumfang ähnlich, jedoch ist three.js etwas näher an den WebGL-Schnittstellen dran, ein wenig ressourceneffizien-\linebreak ter\autocite{karlsson2018}, hat eine größere Nutzerschaft\autocite{npmtrends2022} und erlaubt eine feinere Steuerung.
+
+three.js hat für diese Anwendung einen sehr hohen Stellenwert, insofern war es erst durch diesen Wrapper möglich, in angemessener Zeit eine effiziente 3D-Darstellung der Simulationswelt zu erschaffen.
+Gerade die integrierte Speicherverwaltung von three.js sowie deren Abstraktion haben es ermöglicht, den Implementationsaufwand drastisch zu senken und viele Optimierungen zu nutzen, die die Bibliothek enthält.
+
+
+\subsubsection{JavaScripts Parallelitätsmodell}
+
+Ein übergreifender und wichtiger Aspekt ist, dass JavaScript eine single threaded Sprache ist und sie dadurch keine klassischen Threads besitzt, die auf die gleichen Objekte zugreifen können.
+Als ähnliches Konzept stellt JavaScript Worker bereit, allerdings sind auch diese keine echten Threads und erlauben keine klassische Parallelität wie Threads das tun.
+
+Diese Worker haben ihren eigenen JavaScript Realm\footnote{\url{https://tc39.es/ecma262/\#realm}}.
+Realms sind Kontexte, die alle Informationen und Objekte einer Script Ausführung beinhalten, im Grunde sind es eigene Runtimes.
+Jeder Worker bzw. der Main-Thread agieren also faktisch als eigene Anwendung.
+
+Um Informationen und Objekte von einem Realm in einen anderen zu übertragen, wurde der Cloning-Algorithmus\footnote{\url{https://html.spec.whatwg.org/multipage/structured-data.html\#safe-passing-of-structured-data}} spezifiziert, der die Daten in ein Realm unabhängiges Binärformat serialisiert und sie dann wieder in Java-\linebreak Script-Werte des anderen Realms deserialisiert.
+Dieses Kopieren simuliert allerdings nur, dass zwei Worker auf die gleichen Daten Zugriff haben.
+
+Dadurch entsteht eine starke Isolation und somit auch eine Hierarchie, an die die Bausteine für diese Anwendung angelehnt worden sind.
+
+Übergeordnet sind die zwei \textbf{Applications} (Front- und Backend), welche eigenständige ausführbare Programme sind.
+Sie umfassen ein oder mehrere \textbf{Realms}.
+Diese Realms sind nicht eigenständig betriebsfähig und werden durch die Application in die Runtime geladen.
+Sie wiederrum nutzen \textbf{Realm Components}.
+Realm Components sind ähnlich zu Bibliotheken enthalten also keine vollständige Fachlogik.
+Diese wurden bei der Entwicklung als isolierte Pakete implementiert und beinhalten selbst nur Logik-Fragmente.
+Erst durch ihre komposition im Realm entsteht die eigentliche Anwendungslogik und durch die Verknüpfung von Realms bzw. schlussendlich den Applications dann die eigentliche Plattform.

@@ -1,0 +1,28 @@
+\subsection{Verwandte Arbeiten}
+
+Das Feld der agentenbasierten Simulation erstreckt sich über die unterschiedlichsten wissenschaftlichen Bereiche, wie beispielweise von der evolutionären Entwicklung von Organismen über Lieferketten-Optimierung bis hin zu Stadtplanungs-Auswirkungen.
+Dabei werden unterschiedliche Geltungsbereiche betrachtet.
+Auch unterscheidet sich der Anpassungs-, Konfi\-gurations- oder Implementationsaufwand drastisch\autocite{abar2017}.
+
+Für den Bereich der Verkehrssimulationen gibt es verschiedenste Anwendungen, je nachdem, welche Abstraktionshöhe gewünscht ist.
+Eine der weitverbreitetsten für die Simulation von autonomen Verkehrsteilnehmern\autocite{jing2020} ist die MATSim Simulationsplattform, die sich vor allem dadurch auszeichnet, dass sie mehrere Agenten synchron und unabhängig voneinander in der gleichen Simulation betreibt.\autocite{axhausen2016}
+Sie kann verwendet werden, um Interaktionen im Kontext weniger Fahrer und ihrer Entscheidungen innerhalb einiger Millisekunden zu berechnen, aber auch dafür eingesetzt werden, den gesamten Verkehr in ganz Deutschland zu simulieren\footnote{\url{https://matsim.org/gallery/germany}}.
+Beides gelingt mit den gleichen Agenten.
+
+Andere Anwendungen wie MatLab\footnote{\url{https://de.mathworks.com/products/matlab.html}}, AnyLogic\footnote{\url{https://www.anylogic.com/}} oder NetLogo\footnote{\url{https://ccl.northwestern.edu/netlogo/}} sind generischer werden allerdings auch für die Verkehrssimulation eingesetzt\autocite{jing2020}.
+
+Für die professionelle Stadtplanung kommen viele weitere Anwendungen hinzu, die weniger auf die Fahrer bzw. deren Verhalten abzielen, sondern Aspekte wie den Durchsatz, die Unfallquote, die entstehende Lautstärke, die Funkabdeckung etc. untersuchen wollen.
+
+Diese Anwendungen werden allerdings oft mit anderen Ansätzen oder Agen\-ten-Mischkonzepten entwickelt.
+So wird beim Fraunhofer VMC ein stochastischer Ansatz verfolgt, um Informationen über die Belastung eines einzelnen Fahrzeuges bei einer gegebenen Route zu bestimmen\autocite{burger2021}.
+Dafür können Routen und konkrete Fahrzeugdetails via Parameter angepasst werden.
+
+DLRs SUMO\footnote{\url{https://www.eclipse.org/sumo/}}, Calipers TransModeler\footnote{\url{https://www.caliper.com/TransModeler/}}, TransCad\footnote{\url{https://www.caliper.com/tcovu.htm}}, PTVs Visum\footnote{\url{https://www.ptvgroup.com/en/solutions/products/ptv-visum/}} und die neu erworbene Produktpalette von Bentley\footnote{\url{https://www.bentley.com/en/products/product-line/mobility-simulation-and-analytics}} mit CUBE, Emme und Dynameq sind Anwendungen, die sich auf die Modellierung von Verkehrsflüssen konzentrieren und für die Infrastrukturplanung verwendet werden.
+
+Diese Arbeiten tangieren diese allerdings nur in der Simulationsdomäne, da die hier zu entwickelnde Anwendung nicht primär den Verkehr modellieren soll, sondern erproben soll, ob sich solch eine Anwendung mit den JavaScript Technologien umsetzen lässt.
+Somit verfolgen diese Arbeiten sehr unterschiedliche Entwicklungsziele.
+
+In eine ähnliche Richtung geht die Arbeit von Jozef Méry\autocite{mery2020}, der im Gegensatz dazu eine ähnliche Anwendung im JavaScript Ökosystem entwickelte.
+Diese ist jedoch nicht verteilt, sondern wird vollständig im Browser betrieben und konzentriert sich auf die Modellierung durch das Konzept von Predator und Prey\footnote{\url{https://en.wikipedia.org/wiki/Lotka\%E2\%80\%93Volterra_equations}}.
+Die Arbeiten von Zehe et al.\autocite{zehe2013} demonstrieren im Kontrast dazu welche weiteren Möglichkeiten sich durch eine verteilte JavaScript-Plattform ergeben würden.
+

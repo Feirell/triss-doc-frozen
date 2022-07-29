@@ -1,0 +1,39 @@
+\subsection{Verarbeitungsgeschwindigkeits-Verbesserungen}
+
+Zusätzlich zu den beschriebenen funktionalen Verbesserungen bestehen auch Möglichkeiten die Performance der Anwendung weiter zu verbessern.
+
+Einen kleinen Ausschnitt möglicher Weiterentwicklungen soll im Folgenden gegeben werden.
+
+\subsubsection{Frame Caching}
+
+Wie in der \refsec{sec:reflection-main} angedeutet, ist ein größeres Problem die Übertragungslatenzen, die die Bildwiederholrate negativ beeinflussen kann.
+Diesem könnte entgegengewirkt werden, indem die Zwischenstationen, also der Simulation Instance Realtime Handler, der Individual WebSocket Handler und der Server Connector, mehrere Frames vorhalten und diese dadurch regelmäßiger übertragen bzw. bereitstellen könnten.
+
+Die Herausforderung dabei ist jedoch, dass dieses Zwischenspeichern in Balance mit dem Speichervolumen und der Verzögerung durch diese gehalten werden muss.
+Zusätzlich erhöht sich die Komplexität durch die unterschiedlichen Verarbeitungsgeschwindigkeiten der beteiligten Rechensysteme.
+
+Wenn zum Beispiel Client A die Zustände mit 30 Hz darstellen kann, Client B mit 60 Hz und der Agent sie mit 45 Hz produziert, dann ist es hier nicht trivial, diese Caches zu implementieren, sodass sie tatsächlich unterstützen und nicht die Darstellung behindern.
+
+Hinzu kommt, dass dann die neu angefragte Exported Agent Data nicht mehr direkt im nächsten Frame bereitgestellt werden könnte, sondern einige Frames Latenz hätten, insofern die neuen Informationen erst einmal durch alle Caches traversieren müsste.
+
+\subsubsection{(De-)Serialisierung implizieren}
+
+Ein großer Vorteil würde sich dadurch ergeben, wenn die (De-)Serialisierung nicht mehr explizit in einem Schritt durchgeführt werden würde, sondern das System und die Agenten direkt auf der Binärrepräsentation arbeiten würden und dadurch keine volle (De-)Serialisierung mehr benötigt wird.
+
+Dies hätte allerdings einen enormen Änderungsaufwand für diese Anwendung bedeutet, deshalb wurde dies hier nicht mehr in Betracht gezogen.
+
+Zentral wäre dabei, die 25 \% der Zeit im Client für die Garbage Collection zu reduzieren und den diskreten Schritt der Deserialisierung und Objekterstellung auszusparen.
+
+Gerade letztere überwiegt den eigentlichen Darstellungsaufwand bei Weitem und würde somit viel Zeit für die Darstellung bzw. die Erzeugung freimachen.
+
+Idealerweise würde der übertragene Frame vom Agenten direkt in den GPU Buffer geschrieben werden und dann durch einen entsprechenden Shader in die notwendige Darstellung umgeformt werden.
+
+\subsubsection{Frame Skipping}
+
+Wie sich im Kapitel \refsec{sec:reflection-main} erkennen ließ, ist die Serialisierung ein beschränkender Faktor.
+Die bereits beschriebenen Überlegungen könnten diesen drastisch verringern, jedoch sind sie alle sehr aufwendig in der Implementation.
+
+Einfacher wäre es da das System so zu erweitern, dass die Darstellung, Erzeugung und (De-)Serialiserung im Gleichgewicht gehalten wird, in dem Frames zwar errechnet werden, jedoch nicht Serialisiert und Übertragen werden.
+
+Diese Anpassung ist aber ähnlich wie das Caching nicht vollständig trivial, wenn mehrere Consumer und Fluktuationen in der Latenz und Übertragungsgeschwindigkeit mit in Betracht gezogen werden.
+Sie besitz allerdings ein bedeutend besseres Aufwand/Resultat Verhältnis als es beispielweise das Implizieren oder Cachen hat.

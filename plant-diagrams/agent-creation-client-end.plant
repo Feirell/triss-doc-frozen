@@ -1,0 +1,30 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam BoxPadding 60
+skinparam ParticipantPadding 20
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #aaaaaa
+skinparam defaultFontName Arial
+
+actor Benutzer
+
+box \nTRISS Frontend\nFrontend Main Realm\n
+participant "MainMenu\nAgentsComponent" as ui
+participant "Server\nConnection" as sc
+end box
+
+autonumber 4.5
+
+activate sc
+sc <-]: Agent erstellungs\nResultats-Nachricht senden
+
+sc -> sc: Nachricht deserialisieren
+
+autonumber 5.1
+sc -> ui ++: Neuen Agenten\nanzeigen
+return
+deactivate sc
+|||
+@enduml

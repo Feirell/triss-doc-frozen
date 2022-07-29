@@ -1,0 +1,107 @@
+\subsection{Motivation}
+
+Agentenbasierte Systeme sind in der heutigen Forschung und Softwareentwicklung allgegenwärtig.
+Diese Art der Modellierung findet sowohl in der Wirtschaft\autocite{Levy2009} und der Erforschung von sozialem Verhalten\autocite{fang2016} als auch schon in der frühen Verkehrsplanung\autocite{wiedermann1974} Anwendung.
+
+Agentenbasierte Modellierung besticht dabei vor allem durch ihre realitätsnahe Konzipierung.
+Ähnlich zu objektorientierter Programmierung werden hier reale Entitäten als Softwarekomponenten spezifiziert.
+Dabei stehen bei der agentenbasierten Modellierung der Akteur als \textbf{Agent} und sein Handeln in einem \textbf{System} im Vordergrund.
+Die agentenbasierte Modellierung beschreibt allerdings nur das Konzept dieser beiden Komponenten.
+
+Im Kontext der Wirtschaftssimulation ist das Wirtschaftssystem das \textbf{System} und die \textbf{Akteure} beispielweise Käufer, Verkäufer oder Produ-\linebreak zenten\autocite{agenteco2015}.
+Im Falle einer Verkehrssimulation wäre dies das Verkehrssystem mit Autofahrern, Fußgängern und Radfahrern\autocite{fujii2017}.
+
+In beiden Fällen hängen die implementierten Akteure stark von dem Ziel der Simulation ab.
+Sollte man beispielweise Micro-Verhalten eines Verkehrssystems simulieren wollen, um zu ermitteln, welche Gründe es für Stau gibt, könnte es vorteilhaft sein, den Autofahrer nicht zu verallgemeinern, sondern spezielle Ausprägungen seines Verhaltens wie beispielweise Sonntags-Fahrer, Pendler oder Raser zu implementieren.
+
+Der Agent ist dabei ein Typ von Akteuren, die durch ihr Verhalten im System zusammengefasst werden könne.
+Er definiert primär das Verhalten in Form der Auswahl einer Aktion im System auf Grundlage der wahrgenommenen Umgebung und seines inneren Zustands.
+Das System definiert hingegen die Realität und spezifiziert damit, welche möglichen Aktionen ein Agent und welches Resultat eine Handlung hat, und definiert gleichzeitig damit implizit die Relation von Agenten\autocite{salamon2011}.
+
+Besonders wichtig dabei ist, dass ein Agent nur auf Grundlage von lokalem, beschränktem Wissen agiert.
+Sein Verhalten ist oft sehr einfach gehalten und definiert häufig einen diskreten Übergang von einem zu einem anderen Zustand.\autocite{salamon2011}
+
+Der große Vorteil dieser Art der Modellierung besteht darin, dass diese einfachen Regeln dann durch ihre Wechselwirkungen ein komplexes, sogenanntes \textbf{emergentes Verhalten} erzeugen.
+
+Dieses emergente Verhalten ist dann auch oft der Untersuchungsgegenstand, wobei es dann das Ziel sein kann, es zu erkennen, zu erzeugen oder zu vermeiden.\autocite{chen2007}
+So könnte bei einem Verkehrssystem versucht werden das emergente Verhalten \textit{Stau} zu vermeiden oder zu verringern.
+
+Da dieses Verhalten jedoch nicht explizit definiert ist, gelingt dies nur, indem das System angepasst (Menge der Spuren, Geschwindigkeitsbegrenzungen etc.) oder das Verhalten der Agenten modifiziert wird (Abstandseinhaltung, Beschleunigung etc.).
+
+Jedoch ist der Prozess, von einer Ausgangsdefinition zu einer Definition für das System bzw.\ dessen Agenten zu gelangen, die das gewünschte Verhalten zeigen, nicht trivial und lässt sich im Regelfall nur iterativ approximie-\linebreak ren.\autocite{nikolic2011}
+
+Bei dieser iterativen Konzipierung und Entwicklung kann eine entsprechend darauf ausgerichtete Plattform stark unterstützen.
+
+Viele solcher Plattformen wurden mithilfe von C/C++ oder Java ent-\linebreak wickelt\autocite{abar2017}, was zum einen erfordert, dass diese Plattformen und ihre Abhängigkeiten installiert werden müssen, und zum anderen, dass die Agenten mit dieser oder einer kompatiblen Sprache erstellt werden.
+
+Dies resultiert in einer Einstiegshürde, die sich durch die Verwendung eines Webbrowsers und damit der Sprache JavaScript für die Programmierung verringern ließe.
+
+Deshalb soll durch diese Arbeit überprüft werden, ob mit den Technologien des JavaScript Ökosystems eine solche Simulationsplattform geschaffen werden kann, die erweiterbar ist und sich zur performanten Darstellung des Simulationszustandes eignet.
+
+Dies soll anhand einer exemplarisch abstrakten Verkehrssimulation geschehen.
+
+%\begin{itemize}
+%\item Interaktionen von lokal agierenden Verkehrsteilnehmern führen zu emergentem Verhalten welches für den einzelnen Autofahrer schwer zu greifen ist.
+%\item Wechselwirkungen können zu Kaskaden und damit zum Zusammenbruch des Verkehrsflusses führen, die eigentlichen Ursachen sind allerdings meist schwer nachzuvollziehen.
+%\item Diese Phänomäne sind für mich sehr spannend, insofern sie dem Verkehr eine Eigendynamik geben, welche nicht direkt durch einzelne Teilnehmer gesteuert werden.
+%\item Mit Simulationssoftware lassen sich solche Phänomäne leichter veranschaulichen und die Ursachen bzw. die Auswirkungen besser nachvollziehen.
+%\end{itemize}
+
+%Als Softwareentwickler interessierte ich mich schon immer für komplexe Systeme, Vor allem solche welche viele Beteiligten haben.
+%
+%Gerade Systeme welche dezentral wirken und keiner übergeordnete Kontrolle unterliegen waren dabei spannend.
+%Solche Systeme funktionieren zumeist weil die beteiligten Akteure lokal aber nicht unabhängig voneinander agieren.
+%
+%Ein Beispiel sind hier Ameisen.
+%Sie haben keine Anführer oder Befehlsstrukturen und trotzdem arbeiten tausende von Akteuren zielgerichtet und gemeinschaftlich auf ein Ziel hin.
+%
+%Dies ist dadurch möglich das alle Akteure auf andere Akteure, Umgebungseigenschaften und Signale achten.
+%Da Akteure, in diesem Kontext Ameisen, auf andere Akteure achten, und ihr Verhalten an diese anpassen, entstehen Wechselwirkungen.
+%
+%Diese Wechselwirkungen lassen die gesamte Ameisenkolonie als eine intelligente Einheit erscheinen.
+%Dieses Phänomen nennt man auch emergentes Verhalten.
+%Emergent nennt man das System dann, wenn das Verhalten der Akteure auf \textit{lokalen impulsen} basiert, wenn  \textit{nahe andere Akteure} ihr Verhalten beeinflussen, sie untereinander gleichberechtigt sind bzw. es keine Hierarchie gibt und ihr Verhalten mit Regeln modelliert werden kann.
+%
+%Emergente Systeme haben mich schon immer fasziniert, weil ihr Verhalten intelligent erscheint aber nicht zentral kontrolliert wird.
+%Dadurch ist ihre Definition verhältnismäßig einfach, insofern nur die einfachen lokalen Verhaltensweisen der Akteure bestimmt werden müssen, jedoch ist die Abschätzung, welchen Zustand das System nach einer bestimmten Zeit hat, nahezu unmöglich.
+%
+%Auch in unserer Gesellschaft wirken solche emergenten Systeme.
+%Ein klassischen ist die Wirtschaft, welche durch lokal agierende, mit relativ einfachen Regeln definierte Akteure beschrieben werden kann.
+%Deren Aktionen im System wirken sich auf andere Akteure aus und erzeugen dadurch kaskadierende Wechselwirkungen.
+%
+%Conway's Game of Life ist ein anderes, etwas einfacheres System.
+%Auch wenn die Regeln des Systems auf weniger als eine DIN A4 Seite passen, ist es fast unmöglich den Endzustand des Systems zu bestimmen.
+%
+%Ein anderes System, welches Menschen erzeugt haben und welches emergentes Verhalten zeigt ist der Straßenverkehr.
+%Auch hier erzeugen lokale Akteure, welche relativ einfache Regeln befolgen, ohne eine übergeordnete Kontrollstruktur zu haben, ein komplexes System, bei dem es so wirkt als hätte es ein gesamtheitliches Verhalten.
+%
+%Diese Agenten beeinflussen sich gegenseitig, so kann man beispielweise auf seiner aktuellen Spur nur so weit fahren wie es das Auto vor einem erlaubt.
+%Auch bei diesem System ist es nahezu unmöglich abzuschätzen welchen Zustand das System nach einer gewissen Zeitspanne hat.
+%
+%Deshalb möchte ich in dieser Arbeit eine Simulationsplattform schaffen welche es dem Nutzer erlaubt, durch definition dieser einfachen Regeln, abzuschätzen inwieweit selbst kleine Änderungen das Gesamtverhalten des System gravierend verändern kann und dadurch das komplexe Verhalten erfahrbarer zu machen.
+%
+%\iffalse
+%Der Straßenverkehr ist ein äußerst spannendes System.
+%Er wird durch strenge Regeln welche alle Teilnehmer einhalten müssen abschätzbar, wird jedoch im Detail durch lokal agierende Beteiligte ausgestaltet.
+%Letztere sorgen dafür, dass, in Kombination mit den Wechselwirkungen zwischen den Fahrern, der Straßenverkehr zu einem emergenten System wird.
+%Dadurch ist der Verkehrsfluss schlecht abzuschätzen und vor allem nur sehr bedingt zu kontrollieren.
+%
+%Wenn also beispielweise ein abrupter Spurwechsel zu einem abruptem Bremsmanöver führt, welches dann zu einem Stau ohne Staugrund führt und dieses Stauende sich in einer Kurve befindet, in welche ein anderer Fahrer kollidiert und bei dem Auffahrunfall sein Leben verliert, dann ist es nicht offensichtlich, dass der unbedachte Spurwechsel an dem Unfall beteiligt war.
+%
+%Diese Art von Phänomene interessieren mich bei dem Straßenverkehr sehr, sie demonstrieren sehr anschaulich wie komplex etwas so alltägliches sein kann.
+%Sicherlich helfen solche Erkenntnisse nicht bei dem alltäglichen Verwenden weiter, können jedoch durchaus dabei helfen Straßenabschnitte zu planen oder Gesetzmäßigkeiten anzupassen.
+%
+%Sollte in der Realität man ein Problem mit diesem System vermuten, dann bedarf es langer Untersuchungen, um die Ursache zu finden.
+%Nicht selten lassen sie sich gar nicht finden, da die Umstände nicht wieder hergestellt werden können.
+%Auch ist selten der Aufwand in einem angebrachten Verhältnis zu dem eigentlichen Problem.
+%Oft könnte schon durch eine einfache Anpassung der Ampelschaltung der Verkehrsfluss stark verbessert werden wodurch indirekte Konsequenzen vermieden werden können.
+%
+%Selbst wenn dann eine Ursache gefunden worden ist, muss dann noch eine Anpassung geplant werden.
+%Dessen Folge lässt sich allerdings so gut wie gar nicht bestimmen außer sie wurde an anderer Stelle bereits erprobt, da es sich hier um ein emergentes System handelt.
+%Dieses kann, wenn überhaupt, nur stochastisch abgeschätzt werden.
+%Das Straßenverkehrssystem lässt aber selbst das nicht zu.
+%
+%Aus diesem Grund soll eine Software schaffen, welche es möglich machen soll, diese Phänomene modellhaft nachzustellen und dann die Ursache zu ergründen.
+%Im Anschluss an die Findung soll es möglich sein eine Lösung iterativ zu erproben, wodurch es einfacher sein soll reale Auswirkungen abzuschätzen und somit effektiver Lösungen anwenden zu können.
+%
+%\fi

@@ -1,0 +1,33 @@
+\subsection{Lösungsstrategie}
+
+%    So nach dem Motto, eine A4 Seite mit dem technischen Kern der Anwendung.
+%    Warum Client Server, Warum Browser, usw.
+
+Um die aufgestellten Anforderungen zu erfüllen, soll eine Plattform erschaffen werden, die eine Reihe von Basisobjekten verwaltet.
+Zentral sind dabei die drei Grundentitäten.
+
+Es wird mit dem Layout \highlight{Layout} begonnen, das ein konkretes Straßennetz repräsentiert.
+Dieses umfasst die \highlight{Kacheln} und die \highlight{Markierungen}.
+Erste stellen die eigentlichen Spuren bzw. deren Repräsentationen dar und letztere spezielle semantische Bereiche, wie beispielweise die Positionen, an denen neue Fahrzeuge erzeugt werden sollen bzw. an denen sie die Welt wieder verlassen.
+
+Die zweite ist der \highlight{Agent}, der durch eine Sammlung von JavaScript Code repräsentiert wird.
+Er wird durch den Nutzer definiert und dazu verwendet, eine Simulation zu betreiben.
+
+Die letzte ist eine tatsächliche \highlight{Simulationsinstanz}, die dann entsteht, wenn ein Agent und ein Layout kombiniert werden.
+Diese umfasst dann den konkreten Zustand des Agenten und die \highlight{Welt}.
+Diese Welt wiederum umschließt sowohl das statische Layout als auch die dynamischen Fahrzeuge.
+
+Das Layout soll durch ein gleichmäßiges Raster beschränkt werden, die Kacheln und die Markierungen sind dann einzelne quadratische Zell-Elemente dieses Rasters.
+Das Raster, in dem die Kacheln und die Markierungen gesetzt werden können, erlaubt zum einem eine einfache Handhabung für den Nutzer sowie einen einfachen Zugriff für den Agenten und zum anderen auch bedeutend simplere Bauelemente.
+Gerade der letzte Aspekt ist auch wichtig für die Erweiterbarkeit, da so nur definiert werden muss, wie diese quadratische, immer gleich große Kachel aussieht und welche Spuren auf ihr, in diesem 1 x 1 großen Feld, existieren, um eine neue im System zu hinterlegen.
+
+Diese Anwendung soll nur ein kleines Repertoire an vorbereiteten Kacheln mitliefern.
+Diese sollen vor allem ausreichen, um darstellen zu können, dass die Anwendung voll funktionstüchtig ist.
+Zusätzlich liefert die Anwendung viele, noch nicht mit Spuren versehene, Kachel-Modelle mit, die eine große Bandbreite an Anwendungsfällen abdecken sollten und damit es zusätzlich erleichtern, diese Anwendung anzupassen.
+
+Dies ist allerdings nur eine zusätzliche Möglichkeit, die Anwendung anzupassen, die beiden zentralen Erweiterbarkeiten sind jedoch die Agenten und die Layouts.
+Die Erstellung bzw. die Anpassung des Layouts soll durch die Anwendung möglichst komfortabel über einen 3D-Editor erfolgen.
+Die Agenten können ähnlich einfach über die Benutzerschnittstelle als JavaScript Dateien eingefügt und dann bei der Instanz Erstellung ausgewählt werden.
+
+Die Instanz, die aus der Welt und dem Agenten besteht, soll via einer 3D-Darstellung ähnlich wie bei der Erstellung des Layouts dargestellt werden können.
+Dies erhöht die Zugänglichkeit und erleichtert es die Ergebnisse zu analysieren.

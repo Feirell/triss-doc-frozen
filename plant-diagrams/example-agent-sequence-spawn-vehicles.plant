@@ -1,0 +1,26 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Alle Spawner der Welt
+heraus suchen;
+while(Spawner verfügbar) is (\nSpanwer\nvorhanden)
+    while(anliegende Kachel) is (\nRouten-\ngruppe)
+        :Zufällige Route vom
+        Navigator wählen welche
+        diese Kachel beinhaltet;
+        :Prüfen ob die anliegende
+        Kachel frei ist;
+        :Wähle zufällige Fahrzeug-
+        klasse aus;
+        :Erzeuge Fahrzeugeintrag
+        im Register, mit dem Ziel
+        und der aktuellen Position;
+        :Fahrzeug platzieren;
+    endWhile
+endWhile
+end
+@enduml

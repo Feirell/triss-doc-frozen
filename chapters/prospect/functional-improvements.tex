@@ -1,0 +1,42 @@
+\subsection{Funktionale Weiterentwicklungen}
+
+\subsubsection{Generierung von Daten-Graphen}
+
+Ein Beispiel für solch eine funktionale und universell praktische Funktion sind Daten-Graphen, die über den Verlauf der Simulation erzeugt werden und im Vorfeld programmatisch definiert worden sind.
+Solch ein Graph könnte beispielweise die Anzahl der Fahrzeuge in jedem Frame darstellen oder die Zeit, die benötigt worden ist, um diesen zu erzeugen.
+Dadurch ließe sich nicht nur ein Verlauf innerhalb einer konkreten Simulation erkennen, sondern auch eine Entwicklung im Hinblick auf unterschiedliche Versionen eines Agenten.
+
+Diese Graphen würden dann mit der Instanz definiert werden und ließen sich dann im Anschluss via SVG/JSON exportiert.
+
+\subsubsection{Speichern und Laden von Instanzen}
+
+Ebenso praktisch wäre das Speichern und Laden von Instanzen, was so noch nicht mit eingebaut ist.
+Die Herausforderung für das Speichern besteht darin, dass der Agent dann die Anforderung erfüllen muss seinen inneren Zustand exportieren können zu müssen.
+
+Unabhängig davon wäre das praktisch für dies Testen von Langzeitverhalten und dafür, solche Instanzen dann von einem System in ein anderes transportieren zu können.
+
+\subsubsection{Anpassen bzw. Färben von Modellen}
+
+Eine weitere vorteilhafte Funktion wäre, wenn der Agent über die Weltdefinition die Fahrzeugmodelle einfärben könnte.
+Das würde dem Agenten erlauben dadurch gewisse Eigenschaften des Fahrzeuges sehr einfach und offensichtlich zu repräsentieren.
+
+Beispielweise könnte der Agent das nutzen, um Fahrzeuge je nach dem Fahrerprofil einzufärben, beispielweise könnte Rot dann einen \enquote{Drängler} und Blau einen \enquote{Sonntagsfahrer} darstellen.
+
+\subsubsection{Konfigurierbare Straßen, Fahrspuren und Kreuzungen}
+
+Frei konfigurierbare Straßen würde der Simulation bedeutende Modellfeinheit geben, vor allem im Hinblick auf die Situationen, in denen man den Agenten testen könnte.
+
+So ist es aktuell nicht ohne Weiteres möglich, Überholvorgänge durch eine parallele Fahrbahn durchzuführen, da keine Kachel existiert, die solch eine Fahrbahn vordefiniert bereitstellen würde.
+Zusätzlich wäre die Möglichkeit, Straßen nicht nur nach einem Kachelmuster setzten zu können, vorteilhaft, um andere Konstellationen für den Agenten zu schaffen.
+
+Hinzu kommt, dass durch ein feiner definierbares Straßennetz auch die Möglichkeit entsteht, mit einem entsprechend komplexen Agenten Rückschlüsse auf den realen Straßenverkehr zu ziehen.
+
+\subsubsection{Local Computation} \label{sec:fnc-impr-local-computation}
+
+Ein großer praktischer Nutzen würde dadurch entstehen, wenn man bei dem Anlegen einer Instanz definieren könnte, wo diese betrieben werden soll.
+So könnte man definieren, dass diese direkt im Browser in einem eigenen Worker die Frames errechnet.
+
+Dies würde die Latenz drastisch verringern und erlauben, diese Anwendung ausschließlich mit einem statischen HTTP-Server und einem Webbrowser zu betreiben.
+Dieser letzte Punkt ist insofern besonders hilfreich, als eine zentrale Instanz, wie beispielweise GitHub Pages, die Assets und Bundles bereitstellt und der Nutzer die eigentliche Rechenleistung für die Berechnung der Frames und die Darstellung dieser.
+
+Somit könnte man diese kostengünstig darüber anbieten, ohne die eigentliche Rechenleistung mit in Betracht ziehen zu müssen, und der Nutzer kann ohne Installation oder Server die Anwendung ausprobieren und verwenden.
